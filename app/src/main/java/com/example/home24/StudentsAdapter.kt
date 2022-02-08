@@ -39,9 +39,4 @@ class StudentsAdapter(private val students: ArrayList<Student>) :
     override fun getItemCount(): Int {
         return students.size
     }
-
-    interface OnRecyclerItemClickListener {
-        fun onItemClick(students: ArrayList<Student>)
-    }
-
 }

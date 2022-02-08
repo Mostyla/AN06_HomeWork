@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.home24.SingletonStudentsArray.selectedStudents
+import com.example.home24.SingletonStudentsArray.students
 import com.example.home24.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
-    private var students: ArrayList<Student> = ArrayList()
-    private val selectedStudents: ArrayList<Student> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,19 +23,23 @@ class MainActivity : AppCompatActivity() {
         setUpRecyclerView(students)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun onBtnClick() {
         binding.btnOK.setOnClickListener {
             students.forEach {
                 if (it.isSelected)
                     selectedStudents.add(it)
             }
+
             if (selectedStudents.size <= 0) {
                 Toast.makeText(applicationContext, "Please, select the students", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
             val intent = Intent(this@MainActivity, RandomActivity::class.java)
             intent.putParcelableArrayListExtra("selectedStudents", selectedStudents)
             startActivity(intent)
+
         }
 
         binding.btnDlt.setOnClickListener {
@@ -46,15 +49,17 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnAdd.setOnClickListener {
             val intent = Intent(this@MainActivity, AddNewStudentActivity::class.java)
-            intent.putParcelableArrayListExtra("students", students)
+            intent.putParcelableArrayListExtra(KEY, students)
             startActivity(intent)
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun deleteStudent() {
         for (i in students.indices.reversed())
             if (students[i].isSelected)
                 students.remove(students[i])
+
     }
 
     private fun setUpRecyclerView(students: ArrayList<Student>) {
@@ -62,17 +67,11 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerStudents.adapter = StudentsAdapter(students)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onResume() {
-        super.onResume()
-        if (binding.recyclerStudents.adapter != null)
-            binding.recyclerStudents.adapter!!.notifyDataSetChanged()
-    }
 
     private fun setUpRecyclerWithData() {
         fillArray()
-        if (intent.getParcelableArrayListExtra<Student>("students") != null) {
-            students = intent.getParcelableArrayListExtra("students")!!
+        if (intent.getParcelableArrayListExtra<Student>(KEY) != null) {
+            students = intent.getParcelableArrayListExtra(KEY)!!
         }
     }
 
@@ -92,5 +91,9 @@ class MainActivity : AppCompatActivity() {
         students.add(Student("Alex", false))
         students.add(Student("Alla", false))
         students.add(Student("Andrey", false))
+    }
+
+    companion object {
+        const val KEY = "students"
     }
 }

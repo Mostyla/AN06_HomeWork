@@ -1,5 +1,6 @@
 package com.example.home24
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.animation.AnimationSet
 import android.view.animation.AnimationUtils
 import android.view.animation.AnimationUtils.loadAnimation
 import com.example.home24.R.anim.*
+import com.example.home24.SingletonStudentsArray.selectedStudents
 import com.example.home24.databinding.ActivityRandomBinding
 import java.util.*
 import kotlin.collections.ArrayList
@@ -36,8 +38,7 @@ class RandomActivity : AppCompatActivity() {
 
     private fun conclusion() {
 
-        val selectedStudents: ArrayList<Student> =
-            intent.getParcelableArrayListExtra("selectedStudents")!!
+        selectedStudents = intent.getParcelableArrayListExtra("selectedStudents")!!
 
             binding.BtnSelect.setOnClickListener {
                 when(Random().nextInt(12)) {

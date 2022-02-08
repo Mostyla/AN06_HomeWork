@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.home24.SingletonStudentsArray.students
 import com.example.home24.databinding.ActivityAddNewStudentBinding
 
 class AddNewStudentActivity : AppCompatActivity() {
@@ -19,17 +20,15 @@ class AddNewStudentActivity : AppCompatActivity() {
 
     private fun addNewStudent() {
 
-        val students: ArrayList<Student> = intent.getParcelableArrayListExtra("students")!!
-
         binding.btnAddStd.setOnClickListener {
 
             val newStudent = binding.etName.text.toString()
             students.add(Student(newStudent, false))
             val intent = Intent(this@AddNewStudentActivity, MainActivity::class.java)
-            intent.putParcelableArrayListExtra("students", students)
+            intent.putParcelableArrayListExtra(KEY, students)
 
             if(newStudent.isNotEmpty()) {
-                startActivity(intent)
+                startActivityForResult(intent,1)
             } else {
                 Toast.makeText(applicationContext,"Please enter the new student name!",Toast.LENGTH_SHORT).show()
             }
@@ -38,6 +37,10 @@ class AddNewStudentActivity : AppCompatActivity() {
                 finish()
             }
         }
+    }
+
+    companion object {
+        const val KEY = "students"
     }
 }
 
