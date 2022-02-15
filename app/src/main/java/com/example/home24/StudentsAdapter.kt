@@ -6,9 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.home24.StudentsAdapter.StudentsViewHolder
 import com.example.home24.databinding.ItemStudentBinding
 
-class StudentsAdapter(private val students: ArrayList<Student>) :
+class StudentsAdapter() :
     RecyclerView.Adapter<StudentsViewHolder>() {
 
+     var students: List<Student> = emptyList()
+    set(value) {
+        field = value
+        notifyDataSetChanged()
+    }
     inner class StudentsViewHolder(itemStudentBinding: ItemStudentBinding) :
         RecyclerView.ViewHolder(itemStudentBinding.root) {
         private val checkBox = itemStudentBinding.checkBox
@@ -20,9 +25,7 @@ class StudentsAdapter(private val students: ArrayList<Student>) :
             checkBox.isSelected = student.isSelected
 
             checkBox.setOnCheckedChangeListener { _, isChecked ->
-                run {
                     student.isSelected = isChecked
-                }
             }
         }
     }
